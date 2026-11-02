@@ -15,6 +15,7 @@ applications:
     memory: 256M
     disk_quota: 1G
     routes:
+      - route: ((domain))
       - route: ((site-host)).((apps-domain))
     health-check-type: http
     health-check-http-endpoint: /

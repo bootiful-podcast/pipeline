@@ -6,5 +6,8 @@ org: bootiful-podcast
 space: production
 
 registry: us-docker.pkg.dev/joshlong/bootiful-podcast-artifact-registry
+# a private domain of the bootiful-podcast org, whose dns and certificate the foundation hosts
+# (README.md, "DNS"). cf push fails on a route under a domain cf doesn't have.
+domain: bootifulpodcast.fm
 apps-domain: apps.applicationconcierge.com
 site-host: bootiful-podcast
