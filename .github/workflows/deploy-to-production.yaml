@@ -1,0 +1,58 @@
+name: Deploy to Cloud Foundry
+
+on:
+  repository_dispatch:
+    types: [update-event]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Push production apps
+    runs-on: ubuntu-24.04
+    env:
+      CF_API: https://api.cf.applicationconcierge.com
+      CF_USERNAME: ${{ secrets.CF_USERNAME }}
+      CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+      CF_DOCKER_PASSWORD: ${{ secrets.CF_DOCKER_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.GCLOUD_SA_KEY }}
+
+      - name: Install gcloud
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Install Cloud Foundry CLI
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key |
+            sudo gpg --dearmor -o /usr/share/keyrings/cli.cloudfoundry.org.gpg
+          echo 'deb [signed-by=/usr/share/keyrings/cli.cloudfoundry.org.gpg] https://packages.cloudfoundry.org/debian stable main' |
+            sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list >/dev/null
+          sudo apt-get update -qq
+          sudo apt-get install -y cf8-cli
+          cf version
+
+      - name: Authenticate to Cloud Foundry
+        run: |
+          set -euo pipefail
+          : "${CF_USERNAME:?CF_USERNAME is required}"
+          : "${CF_PASSWORD:?CF_PASSWORD is required}"
+          : "${CF_DOCKER_PASSWORD:?CF_DOCKER_PASSWORD is required}"
+          cf api "$CF_API"
+          cf auth "$CF_USERNAME" "$CF_PASSWORD"
+
+      - name: Deploy all apps
+        run: ./bin/deploy.sh

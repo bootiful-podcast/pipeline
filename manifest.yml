@@ -1,0 +1,20 @@
+---
+# every bootiful podcast app on cloud foundry, pushed as the container images their own
+# repositories build. see README.md. ((name)) comes from a vars file: vars/<foundation>.yml for
+# names and hosts, and the digests bin/deploy.sh writes to a temporary one. nothing secret
+# belongs in this file.
+applications:
+
+  # the vue spa (bootiful-podcast/site-v2), served by nginx from a paketo image. it reads the
+  # episodes from mogul's public feed in the browser, so it needs no configuration.
+  - name: site
+    docker:
+      image: ((registry))/site@((site-digest))
+      username: _json_key
+    instances: 1
+    memory: 256M
+    disk_quota: 1G
+    routes:
+      - route: ((site-host)).((apps-domain))
+    health-check-type: http
+    health-check-http-endpoint: /

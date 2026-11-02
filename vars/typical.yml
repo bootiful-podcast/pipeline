@@ -1,0 +1,10 @@
+# the names and hosts of bootiful podcast on the typical foundation (cf/typical.env in
+# application-concierge, api.cf.applicationconcierge.com). no secrets here.
+
+# where the apps go. bin/deploy.sh targets these itself.
+org: bootiful-podcast
+space: production
+
+registry: us-docker.pkg.dev/joshlong/bootiful-podcast-artifact-registry
+apps-domain: apps.applicationconcierge.com
+site-host: bootiful-podcast
