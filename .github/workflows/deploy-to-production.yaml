@@ -19,7 +19,8 @@ jobs:
     name: Push production apps
     runs-on: ubuntu-24.04
     env:
-      CF_API: https://api.cf.applicationconcierge.com
+      # the foundation: its api, org, space and hosts are in this file.
+      VARS_FILE: vars/mypaas.yml
       CF_USERNAME: ${{ secrets.CF_USERNAME }}
       CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
       CF_DOCKER_PASSWORD: ${{ secrets.CF_DOCKER_PASSWORD }}
@@ -51,8 +52,8 @@ jobs:
           : "${CF_USERNAME:?CF_USERNAME is required}"
           : "${CF_PASSWORD:?CF_PASSWORD is required}"
           : "${CF_DOCKER_PASSWORD:?CF_DOCKER_PASSWORD is required}"
-          cf api "$CF_API"
+          cf api "$(awk '$1 == "cf-api:" {print $2}' "$VARS_FILE")"
           cf auth "$CF_USERNAME" "$CF_PASSWORD"
 
       - name: Deploy all apps
-        run: ./bin/deploy.sh
+        run: ./bin/deploy.sh --vars "$VARS_FILE"

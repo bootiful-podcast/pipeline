@@ -1,0 +1,16 @@
+# the names and hosts of bootiful podcast on the mypaas foundation
+# (bosh-platform-installer/mypaas.env in application-concierge, api.cf.mypaas.online). no secrets here.
+
+# the foundation's api, for the github actions workflow.
+cf-api: https://api.cf.mypaas.online
+
+# where the apps go. bin/deploy.sh targets these itself.
+org: bootiful-podcast
+space: production
+
+registry: us-docker.pkg.dev/joshlong/bootiful-podcast-artifact-registry
+# a private domain of the bootiful-podcast org, whose certificate and dns
+# bosh-platform-installer/app-domain.sh sets up. cf push fails on a route under a domain cf doesn't have.
+domain: bootifulpodcast.fm
+apps-domain: apps.mypaas.online
+site-host: bootiful-podcast

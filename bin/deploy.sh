@@ -9,7 +9,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-VARS_FILE="$ROOT_DIR/vars/typical.yml"
+VARS_FILE="$ROOT_DIR/vars/mypaas.yml"
 APPS=()
 while [ $# -gt 0 ]; do
   case "$1" in
