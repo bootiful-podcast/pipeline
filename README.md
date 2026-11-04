@@ -46,7 +46,7 @@ bin/deploy.sh                  # every app, or name some: bin/deploy.sh site
 |---|---|---|---|
 | `CF_USERNAME`, `CF_PASSWORD` | this repository | the CF user `josh` on mypaas, OrgManager of `bootiful-podcast` and SpaceDeveloper in `bootiful-podcast` / `production` | |
 | `CF_DOCKER_PASSWORD` | this repository | a JSON key of the service account `bootiful-podcast-cf-puller@joshlong.iam.gserviceaccount.com`, which can only read `bootiful-podcast-artifact-registry` | `bootiful-podcast-cf-image-puller-key` (notes) |
-| `GCLOUD_SA_KEY` | the `bootiful-podcast` org | the account that pushes images, used here to read their digests | |
+| `GCLOUD_SA_KEY` | this repository, and `site-v2` | a JSON key of `bootiful-podcast-ci@joshlong.iam.gserviceaccount.com`, which can only push to and read `bootiful-podcast-artifact-registry`; `site-v2` pushes images with it, and this repository reads their digests | |
 | `BOOTIFUL_PODCAST_GITHUB_PERSONAL_ACCESS_TOKEN` | each app repository | a token that can send the dispatch to this repository | `mogul-github-pat` |
 
 The images are private.
